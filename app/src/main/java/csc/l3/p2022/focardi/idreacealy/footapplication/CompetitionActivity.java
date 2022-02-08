@@ -26,9 +26,9 @@ public class CompetitionActivity extends AppCompatActivity {
     }
     private List<Matchs> getMatchsData() {
         List<Matchs> list = new ArrayList<Matchs>();
-        Matchs vietnam = new Matchs("Francois", "Test","Ajaccio","Test",0,0);
-        Matchs usa = new Matchs("Aaaa", "Test","Bastia","Test",0,1);
-        Matchs russia = new Matchs("BBBBBB", "Test","Ajaccio","Test",0,0);
+        Matchs vietnam = new Matchs("Francois", "Test","Ajaccio","Test","0","0","-1");
+        Matchs usa = new Matchs("Aaaa", "Test","Bastia","Test","0","1","-2");
+        Matchs russia = new Matchs("BBBBBB", "Test","Ajaccio","Test","0","0","3");
 
         list.add(vietnam);
         list.add(usa);

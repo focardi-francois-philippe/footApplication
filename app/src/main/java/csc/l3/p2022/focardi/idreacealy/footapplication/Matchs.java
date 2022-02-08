@@ -8,22 +8,22 @@ public class Matchs {
     private String logoEquipeDomicile;
     private String nomEquipeExterieur;
     private String logoEquipeExterieur;
-    private int scoreEquipeDomicile;
-    private int scoreEquipeExterieur;
+    private String scoreEquipeDomicile;
+    private String scoreEquipeExterieur;
+    private String matchId;
 
 
     public Matchs(String nomEquipeDomicile, String logoEquipeDomicile,
-                  String nomEquipeExterieur, String logoEquipeExterieur, int scoreEquipeDomicile,
-                  int scoreEquipeExterieur)
-    {
+                  String nomEquipeExterieur, String logoEquipeExterieur,
+                  String scoreEquipeDomicile, String scoreEquipeExterieur, String matchId) {
         this.nomEquipeDomicile = nomEquipeDomicile;
         this.logoEquipeDomicile = logoEquipeDomicile;
         this.nomEquipeExterieur = nomEquipeExterieur;
         this.logoEquipeExterieur = logoEquipeExterieur;
         this.scoreEquipeDomicile = scoreEquipeDomicile;
         this.scoreEquipeExterieur = scoreEquipeExterieur;
+        this.matchId = matchId;
     }
-
 
     public String getNomEquipeDomicile() {
         return nomEquipeDomicile;
@@ -57,19 +57,27 @@ public class Matchs {
         this.logoEquipeExterieur = logoEquipeExterieur;
     }
 
-    public int getScoreEquipeDomicile() {
+    public String getScoreEquipeDomicile() {
         return scoreEquipeDomicile;
     }
 
-    public void setScoreEquipeDomicile(int scoreEquipeDomicile) {
+    public void setScoreEquipeDomicile(String scoreEquipeDomicile) {
         this.scoreEquipeDomicile = scoreEquipeDomicile;
     }
 
-    public int getScoreEquipeExterieur() {
+    public String getScoreEquipeExterieur() {
         return scoreEquipeExterieur;
     }
 
-    public void setScoreEquipeExterieur(int scoreEquipeExterieur) {
+    public void setScoreEquipeExterieur(String scoreEquipeExterieur) {
         this.scoreEquipeExterieur = scoreEquipeExterieur;
+    }
+
+    public String getMatchId() {
+        return matchId;
+    }
+
+    public void setMatchId(String matchId) {
+        this.matchId = matchId;
     }
 }
