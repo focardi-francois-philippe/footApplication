@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/onglet_tous_les_matchs"
+        android:enabled="true"
+        android:icon="@drawable/terrain"
+        android:title="@string/bottom_navigation_menu_tous_les_matchs"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/onglet_en_direct"
+        android:enabled="true"
+        android:icon="@drawable/score"
+        android:title="@string/bottom_navigation_menu_en_direct"
+        app:showAsAction="ifRoom" />
+
+</menu>
