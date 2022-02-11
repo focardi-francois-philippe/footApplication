@@ -43,40 +43,16 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     /**
-     * TextView pour permettre l'affichage du JSON non parsé ( pour l'instant)
-     */
-    TextView myTvCountry;
-
-    /**
      * Classe d'énumération pour le type d'action sur l'URL de l'API
      */
     ActionAPI actionAPI;
-
-    /**
-     * Afficher les pays
-     */
-    Button myBtnCountries;
-
-    /**
-     * Afficher les ligues
-     */
-    Button myBtnCompetitions;
 
     /**
      * TODO A METTRE EN ENV
      */
     String key = "84423f0edc1fe46d1e0ffb5a18ba794e98b6b6bbe54f6ab03614f3643489cd98";
 
-    /**
-     * Actvité principal de l'application
-     */
-    Activity act = MainActivity.this;
-
-    ImageView myImgCountry;
-
     Api api;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,45 +63,55 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        myTvCountry = (TextView) findViewById(R.id.tv01);
-        myBtnCountries = (Button) findViewById(R.id.btnCountries);
-        myBtnCompetitions = (Button) findViewById(R.id.btnCompetitions);
+        /**
+         * String qui va contenir tout les pays non parsé
+         */
+        String jsonGET_COUNTRIES = getJSON(actionAPI.GET_COUNTRIES);
 
-        String jsonResponse = getJSON(actionAPI.GET_COUNTRIES);
+        /**
+         * String qui va contenir les compétitions non parsé
+         */
+        String jsonGET_COMPETITION = getJSON(actionAPI.GET_COMPETITION);
+
+        /**
+         * Liste qui va contenir l'ensemble de nos pays
+         */
         List<Country> lstCountry = new ArrayList<Country>();
 
+
+        List<Country> lstCompetition = new ArrayList<Country>();
+
+        /**
+         * Remplissage de liste des pays
+         */
         try {
-            JSONArray myCountries = new JSONArray(jsonResponse);
-            JSONObject jb = myCountries.getJSONObject(0);
+            JSONArray myCountries = new JSONArray(jsonGET_COUNTRIES);
 
             for(int i =0; i < myCountries.length(); i++){
-                JSONObject coutryJSON = myCountries.getJSONObject(i);
-                Country c = new Country(coutryJSON.get("country_id").toString(),coutryJSON.get("country_name").toString(),coutryJSON.get("country_logo").toString());
+                JSONObject countryJSON = myCountries.getJSONObject(i);
+                Country c = new Country(countryJSON.get("country_id").toString(),countryJSON.get("country_name").toString(),countryJSON.get("country_logo").toString());
                 lstCountry.add(c);
             }
 
-            //myTvApi.setText(jb.getString("country_id"));
-                /*myCountries.keys().forEachRemaining(key ->{
-                    Object value = null;
-                    try {
-                        value = myCountries.get(key);
-                        System.out.println("Key = "+key+" value = "+value);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                });*/
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        /**
+         * Remplissage de liste des compétitions
+         */
+        try {
+            JSONArray myCompetition = new JSONArray(jsonGET_COMPETITION);
 
-        myBtnCountries.setOnClickListener(v -> {
-            myTvCountry.setText(lstCountry.get(0).getCountry_name());
-        });
 
-        myBtnCompetitions.setOnClickListener( v-> {
-            myTvCountry.setText(getJSON(actionAPI.GET_COMPETITION));
-        });
+            for(int i=0; i<myCompetition.length(); i++){
+                JSONObject competJSON = myCompetition.getJSONObject(i);
+                // Competition cpt = new Compet(...............
+                //lstCompetition.add(cpt);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
