@@ -39,6 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * String qui va contenir les compétitions non parsé
          */
-        String jsonGET_COMPETITION = getJSON(actionAPI.GET_COMPETITION);
+        String jsonGET_COMPETITION = getJSON(actionAPI.GET_EVENTS);
 
         /**
          * String qui va contenir les compétitions non parsé
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Liste qui va contenir l'ensemble des compétitions
          */
-        List<Competition> lstCompetition = new ArrayList<Competition>();
+        HashSet<Competition> lstCompetitionDay = new HashSet<Competition>();
 
         /**
          * Liste qui va contenir l'ensemble des matchs du jour
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             for(int i=0; i<myCompetition.length(); i++){
                 JSONObject competJSON = myCompetition.getJSONObject(i);
                 Competition cpt = new Competition(competJSON.get("league_name").toString(),competJSON.get("country_logo").toString());
-                lstCompetition.add(cpt);
+                lstCompetitionDay.add(cpt);
             }
 
             /**
@@ -147,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         myBtnCompetitions.setOnClickListener( v-> {
-            myTvCountry.setText(lstCompetition.get(0).getLeague_name());
+            Competition[] comp = lstCompetitionDay.toArray(new Competition[lstCompetitionDay.size()]);
+            myTvCountry.setText(comp[0].getLeague_name()+" "+lstCompetitionDay.size());
         });
 
         myBtnEvent.setOnClickListener(v -> {

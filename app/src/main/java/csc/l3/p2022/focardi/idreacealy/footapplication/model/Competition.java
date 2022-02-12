@@ -1,5 +1,7 @@
 package csc.l3.p2022.focardi.idreacealy.footapplication.model;
 
+import java.util.Objects;
+
 /**
  * Created by Idricealy MOURTADHOI on 12
  */
@@ -27,4 +29,20 @@ public class Competition {
     public void setCountry_logo(String country_logo) {
         this.country_logo = country_logo;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Competition that = (Competition) o;
+        return Objects.equals(league_name, that.league_name) && Objects.equals(country_logo, that.country_logo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(league_name, country_logo);
+    }
+
 }
