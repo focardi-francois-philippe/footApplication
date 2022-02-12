@@ -1,0 +1,23 @@
+/**
+ * Remplissage de ma liste des matchs du jour
+*/
+ for(int i=0; i<myEvents.length(); i++){
+     JSONObject eventJSON = myEvents.getJSONObject(i);
+     Event e = new Event(eventJSON.get("match_id").toString(), eventJSON.get("match_hometeam_name").toString(), eventJSON.get("match_awayteam_name").toString());
+     lstEvents.add(e);
+ }
+
+ ---
+
+ JSONArray myEvents = new JSONArray(jsonGET_EVENTS);
+ ---
+
+/**
+ * String qui va contenir les compétitions non parsé
+ */
+String jsonGET_EVENTS = getJSON(actionAPI.GET_EVENTS);
+---
+
+ myBtnEvent.setOnClickListener(v-> {
+     myTvCountry.setText(String.format("id: %s, home : %s, ", lstEvents.get(0).getMatch_id(), lstEvents.get(0).getAwayteam(),lstEvents.get(0).getHometeam()));
+ });

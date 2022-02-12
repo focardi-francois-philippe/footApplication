@@ -65,6 +65,15 @@ public class Api implements Runnable{
 
     }
 
+    public Api(String ka, ActionAPI a, Activity act, String idLeague){
+        this.keyAPI = ka;
+        this.action = a;
+        this.dateEvent = LocalDate.now();
+        this.a = act;
+        this.urlApi = String.format("https://apiv3.apifootball.com/?action=%s&from=%s&to=%s&league_id=%s&APIkey=%s",a.getAction(),dateEvent.toString(),dateEvent.toString(),idLeague,ka);
+        System.out.println(urlApi);
+    }
+
     @Override
     public void run() {
         a.runOnUiThread(()->{

@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     Button myBtnCompetitions;
     Button myBtnEvent;
     TextView myTvCountry;
-    String strJSON;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         // Permettre le non crash au moment du lacement de l'application
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
 
         myTvCountry = (TextView) findViewById(R.id.tv01);
         myBtnCountries = (Button) findViewById(R.id.btnCountries);
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * String qui va contenir les compétitions non parsé
          */
-        String jsonGET_EVENTS = getJSON(actionAPI.GET_EVENTS);
+        String jsonGET_EVENTS_LEAGUE = getJSON(actionAPI.GET_EVENTS_LEAGUE, "302");
 
         /**
          * Liste qui va contenir l'ensemble de nos pays
@@ -104,12 +104,12 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Liste qui va contenir l'ensemble des matchs du jour
          */
-        List<Event> lstEvents = new ArrayList<Event>();
+        List<Event> lstEventsLeague = new ArrayList<Event>();
 
         try {
             JSONArray myCountries = new JSONArray(jsonGET_COUNTRIES);
             JSONArray myCompetition = new JSONArray(jsonGET_COMPETITION);
-            JSONArray myEvents = new JSONArray(jsonGET_EVENTS);
+            JSONArray myEventsLeague = new JSONArray(jsonGET_EVENTS_LEAGUE);
 
             /**
              * Remplissage de liste des pays
@@ -130,13 +130,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             /**
-             * Remplissage de ma liste des matchs du jour
-            */
-             for(int i=0; i<myEvents.length(); i++){
-                 JSONObject eventJSON = myEvents.getJSONObject(i);
-                 Event e = new Event(eventJSON.get("match_id").toString(), eventJSON.get("match_hometeam_name").toString(), eventJSON.get("match_awayteam_name").toString());
-                 lstEvents.add(e);
-             }
+             * Remplissage de liste des events compet
+             */
+            for(int i=0; i<myEventsLeague.length(); i++){
+                JSONObject eventsLeagueJSON = myEventsLeague.getJSONObject(i);
+                Event event = new Event(eventsLeagueJSON.get("match_id").toString(),eventsLeagueJSON.get("match_hometeam_name").toString(),eventsLeagueJSON.get("match_awayteam_name").toString());
+                lstEventsLeague.add(event);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -150,24 +150,34 @@ public class MainActivity extends AppCompatActivity {
             myTvCountry.setText(lstCompetition.get(0).getLeague_name());
         });
 
-        myBtnEvent.setOnClickListener(v-> {
-            myTvCountry.setText(String.format("id: %s, home : %s, ", lstEvents.get(0).getMatch_id(), lstEvents.get(0).getAwayteam(),lstEvents.get(0).getHometeam()));
+        myBtnEvent.setOnClickListener(v -> {
+            myTvCountry.setText(String.format("id: %s, home : %s, away : %s ", lstEventsLeague.get(0).getMatch_id(), lstEventsLeague.get(0).getHometeam(),lstEventsLeague.get(0).getAwayteam()));
         });
 
     }
 
+    /**
+     * Récpérer le JSON non parsé selon l'action sur l'URL de l'API
+     * @param a action sur l'url
+     * @return données JSON non parsé
+     */
     private String getJSON(ActionAPI a){
         api = new Api(key, a, MainActivity.this);
         api.run();
         return api.getsJson();
     }
 
-    public String getStrJSON() {
-        return strJSON;
-    }
-
-    public void setStrJSON(String strJSON) {
-        this.strJSON = strJSON;
+    /**
+     * Récupérer le JSON des évenements du jour
+     * non parsé selon l'action et l'ID de la league.
+     * @param a action sur l'url
+     * @param id id league
+     * @return données json des matchs du jour non parsé
+     */
+    private String getJSON(ActionAPI a, String id){
+        api = new Api(key, a, MainActivity.this, id);
+        api.run();
+        return api.getsJson();
     }
 
 }
