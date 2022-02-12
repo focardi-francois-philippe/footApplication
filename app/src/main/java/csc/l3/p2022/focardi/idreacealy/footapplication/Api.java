@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Created by Idricealy MOURTADHOI on 06
@@ -33,55 +35,55 @@ public class Api implements Runnable{
     private String urlApi;
 
     /**
-     * Activité sur laquelle l'API va intéragir
+     * Attribut qui nous permettra de récupérer les données JSON non parsé sous forme de string
      */
-    private Activity act;
-
     private String sJson;
 
-    private TextView tv;
-    private JSONObject jo;
+    /**
+     * Date correspondant au events pour une date donnée
+     */
+    private LocalDate dateEvent;
+
+    private Activity a;
 
     /**
      *
      * @param ka Clé de l'API
      * @param a Type d'action de notre requête
-
      */
-
-    public Api(String ka, ActionAPI a){
+    public Api(String ka, ActionAPI a, Activity act){
         this.keyAPI = ka;
         this.action = a;
-        //this.act = act;
-        //this.tv = tv;
-        this.urlApi = String.format("https://apiv3.apifootball.com/?action=%s&APIkey=%s",a.getAction(),ka);
+        this.dateEvent = LocalDate.now();
+        this.a = act;
+
+        if(a == ActionAPI.GET_EVENTS){
+            this.urlApi = String.format("https://apiv3.apifootball.com/?action=%s&from=%s&to=%s&APIkey=%s",a.getAction(),dateEvent.toString(),dateEvent.toString(),ka);
+        }else{
+            this.urlApi = String.format("https://apiv3.apifootball.com/?action=%s&APIkey=%s",a.getAction(),ka);
+        }
+
     }
 
     @Override
     public void run() {
-        try {
-            URL url = new URL(urlApi);
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-            String inputLine;
+        a.runOnUiThread(()->{
+            try {
+                URL url = new URL(urlApi);
+                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+                String inputLine;
 
-            while((inputLine = in.readLine()) !=  null){
-                setsJson(inputLine);
+                while((inputLine = in.readLine()) !=  null){
+                    setsJson(inputLine);
+                }
+
+                in.close();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            in.close();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public JSONObject getJo() {
-        return jo;
-    }
-
-    private void setJo(JSONObject jo) {
-        this.jo = jo;
+        });
     }
 
     public void setsJson(String sJson) {

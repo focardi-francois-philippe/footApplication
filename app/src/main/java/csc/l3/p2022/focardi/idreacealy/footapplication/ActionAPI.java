@@ -7,7 +7,8 @@ package csc.l3.p2022.focardi.idreacealy.footapplication;
  */
 public enum ActionAPI {
     GET_COUNTRIES("get_countries"),
-    GET_COMPETITION("get_leagues");
+    GET_COMPETITION("get_leagues"),
+    GET_EVENTS("get_events");
 
     /**
      * Type de requête qui correspond au paramètre de l'URL de l'API

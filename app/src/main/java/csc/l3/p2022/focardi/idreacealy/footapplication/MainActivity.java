@@ -17,7 +17,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import csc.l3.p2022.focardi.idreacealy.footapplication.databinding.ActivityMainBinding;
+import csc.l3.p2022.focardi.idreacealy.footapplication.model.Competition;
 import csc.l3.p2022.focardi.idreacealy.footapplication.model.Country;
+import csc.l3.p2022.focardi.idreacealy.footapplication.model.Event;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
     Api api;
 
+    Button myBtnCountries;
+    Button myBtnCompetitions;
+    Button myBtnEvent;
+    TextView myTvCountry;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
         // Permettre le non crash au moment du lacement de l'application
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        myTvCountry = (TextView) findViewById(R.id.tv01);
+        myBtnCountries = (Button) findViewById(R.id.btnCountries);
+        myBtnCompetitions = (Button) findViewById(R.id.btnCompetitions);
+        myBtnEvent = (Button) findViewById(R.id.btnEvent);
 
         /**
          * String qui va contenir tout les pays non parsé
@@ -74,49 +86,79 @@ public class MainActivity extends AppCompatActivity {
         String jsonGET_COMPETITION = getJSON(actionAPI.GET_COMPETITION);
 
         /**
+         * String qui va contenir les compétitions non parsé
+         */
+        String jsonGET_EVENTS = getJSON(actionAPI.GET_EVENTS);
+
+        /**
          * Liste qui va contenir l'ensemble de nos pays
          */
         List<Country> lstCountry = new ArrayList<Country>();
 
-
-        List<Country> lstCompetition = new ArrayList<Country>();
+        /**
+         * Liste qui va contenir l'ensemble des compétitions
+         */
+        List<Competition> lstCompetition = new ArrayList<Competition>();
 
         /**
-         * Remplissage de liste des pays
+         * Liste qui va contenir l'ensemble des matchs du jour
          */
-        try {
-            JSONArray myCountries = new JSONArray(jsonGET_COUNTRIES);
+        List<Event> lstEvents = new ArrayList<Event>();
 
+
+        try {
+            JSONArray myCountries;
+            myCountries = new JSONArray(jsonGET_COUNTRIES);
+            JSONArray myCompetition = new JSONArray(jsonGET_COMPETITION);
+            JSONArray myEvents = new JSONArray(jsonGET_EVENTS);
+
+            /**
+             * Remplissage de liste des pays
+             */
             for(int i =0; i < myCountries.length(); i++){
                 JSONObject countryJSON = myCountries.getJSONObject(i);
                 Country c = new Country(countryJSON.get("country_id").toString(),countryJSON.get("country_name").toString(),countryJSON.get("country_logo").toString());
                 lstCountry.add(c);
             }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        /**
-         * Remplissage de liste des compétitions
-         */
-        try {
-            JSONArray myCompetition = new JSONArray(jsonGET_COMPETITION);
-
-
+            /**
+             * Remplissage de liste des compétitions
+            */
             for(int i=0; i<myCompetition.length(); i++){
                 JSONObject competJSON = myCompetition.getJSONObject(i);
-                // Competition cpt = new Compet(...............
-                //lstCompetition.add(cpt);
+                Competition cpt = new Competition(competJSON.get("league_name").toString(),competJSON.get("country_logo").toString());
+                lstCompetition.add(cpt);
             }
+
+            /**
+             * Remplissage de ma liste des matchs du jour
+            */
+             for(int i=0; i<myEvents.length(); i++){
+                 JSONObject eventJSON = myEvents.getJSONObject(i);
+                 Event e = new Event(eventJSON.get("match_id").toString(), eventJSON.get("match_hometeam_name").toString(), eventJSON.get("match_awayteam_name").toString());
+                 lstEvents.add(e);
+             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        myBtnCountries.setOnClickListener(v -> {
+            myTvCountry.setText(lstCountry.get(0).getCountry_name());
+        });
+
+        myBtnCompetitions.setOnClickListener( v-> {
+            myTvCountry.setText(lstCompetition.get(0).getLeague_name());
+        });
+
+        myBtnEvent.setOnClickListener(v-> {
+            myTvCountry.setText(String.format("id: %s, home : %s, ", lstEvents.get(0).getMatch_id(), lstEvents.get(0).getAwayteam(),lstEvents.get(0).getHometeam()));
+        });
 
     }
 
     private String getJSON(ActionAPI a){
-        api = new Api(key, a);
+        api = new Api(key, a, MainActivity.this);
         api.run();
         return api.getsJson();
     }
