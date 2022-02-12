@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     Button myBtnCompetitions;
     Button myBtnEvent;
     TextView myTvCountry;
+    String strJSON;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,10 +106,8 @@ public class MainActivity extends AppCompatActivity {
          */
         List<Event> lstEvents = new ArrayList<Event>();
 
-
         try {
-            JSONArray myCountries;
-            myCountries = new JSONArray(jsonGET_COUNTRIES);
+            JSONArray myCountries = new JSONArray(jsonGET_COUNTRIES);
             JSONArray myCompetition = new JSONArray(jsonGET_COMPETITION);
             JSONArray myEvents = new JSONArray(jsonGET_EVENTS);
 
@@ -161,6 +160,14 @@ public class MainActivity extends AppCompatActivity {
         api = new Api(key, a, MainActivity.this);
         api.run();
         return api.getsJson();
+    }
+
+    public String getStrJSON() {
+        return strJSON;
+    }
+
+    public void setStrJSON(String strJSON) {
+        this.strJSON = strJSON;
     }
 
 }
