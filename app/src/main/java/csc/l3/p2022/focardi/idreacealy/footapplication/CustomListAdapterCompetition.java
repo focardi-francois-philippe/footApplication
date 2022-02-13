@@ -60,6 +60,7 @@ public class CustomListAdapterCompetition extends BaseAdapter {
         holder.countryNameView.setText(competition.getNomPays());
         holder.championnatName.setText(competition.getNomChampionnat());
 
+        competition.loadMapPreview(holder.flagView);
         //int imageId = this.getMipmapResIdByName(country.getFlagName());
 
         //holder.flagView.setImageResource(imageId);

@@ -1,27 +1,39 @@
 package csc.l3.p2022.focardi.idreacealy.footapplication;
 
-public class Competition {
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Objects;
+
+public class Competition implements Comparable<Competition>{
+    private String idChampionnat;
     private String nomChampionnat;
     private String nomPays;
-    private int idPays;
-    private int idChampionnat;
     private String drapeau;
 
 
 
-    public Competition(String nomPays, String drapeau, String nomChampionnat, int idPays, int idChampionnat) {
-        this.nomPays= nomPays;
-        this.drapeau= drapeau;
-        this.nomChampionnat= nomChampionnat;
-        this.idPays = idPays;
+
+    public void setIdChampionnat(String idChampionnat) {
         this.idChampionnat = idChampionnat;
     }
 
-    public int getIdPays() {
-        return idPays;
+    public Competition(String nomPays, String drapeau, String nomChampionnat, String idChampionnat) {
+        this.nomPays= nomPays;
+        this.drapeau= drapeau;
+        this.nomChampionnat= nomChampionnat;
+        this.idChampionnat = idChampionnat;
     }
 
-    public int getIdChampionnat() {
+
+
+    public int compareTo(Competition c) {
+        return this.getNomPays().compareTo(c.getNomPays());
+    }
+    public String getIdChampionnat() {
         return idChampionnat;
     }
     public String getNomChampionnat() {
@@ -51,5 +63,42 @@ public class Competition {
     @Override
     public String toString() {
         return this.nomPays +" " + this.nomChampionnat;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        boolean res = false;
+        if(o instanceof Competition && o != null)
+        {
+            Competition c = (Competition) o;
+            res = this.idChampionnat.equals(c.idChampionnat);
+        }
+        return res;
+    }
+    public void loadMapPreview (ImageView logoCompet) {
+        //start a background thread for networking
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    //download the drawable
+                    final Drawable drawable = Drawable.createFromStream((InputStream) new URL(drapeau).getContent(), "src");
+                    //edit the view in the UI thread
+                    logoCompet.post(new Runnable() {
+                        public void run() {
+                            logoCompet.setImageDrawable(drawable);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) idChampionnat.hashCode() *
+                nomChampionnat.hashCode() *
+                nomPays.hashCode();
     }
 }
