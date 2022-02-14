@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @RequiresApi(api = Build.VERSION_CODES.O)
     private HashSet<Competition> getListData() {
 
+        /*
         HashSet<Competition> lstCompetitionDay = new HashSet<Competition>();
         try {
             JSONArray myCompetition = api.getJsonArray();
@@ -99,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             e.printStackTrace();
         }
 
-        return lstCompetitionDay;
+        return lstCompetitionDay;*/
+        return api.getLstCompetitionDay();
     }
 
     @Override

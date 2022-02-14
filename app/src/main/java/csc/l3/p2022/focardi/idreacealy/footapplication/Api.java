@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 
 /**
  * Created by Idricealy MOURTADHOI on 06
@@ -53,6 +54,7 @@ public class Api implements Runnable{
 
     private JSONArray jsonArray;
 
+    private HashSet<Competition> lstCompetitionDay;
     /**
      *
      * @param ka Clé de l'API
@@ -82,6 +84,14 @@ public class Api implements Runnable{
         System.out.println(urlApi);
     }
 
+    public HashSet<Competition> getLstCompetitionDay() {
+        return lstCompetitionDay;
+    }
+
+    public void setLstCompetitionDay(HashSet<Competition> lstCompetitionDay) {
+        this.lstCompetitionDay = lstCompetitionDay;
+    }
+
     @Override
     public void run() {
         try {
@@ -93,7 +103,25 @@ public class Api implements Runnable{
             }
             try {
                 jsonArray = new JSONArray(sJson);
-                Log.e("JsonArray", String.valueOf(jsonArray));
+                HashSet<Competition> lstCompetitionDay = new HashSet<Competition>();
+                try {
+
+                    int longueurCompetition =jsonArray.length();
+                    for(int i=0; i<longueurCompetition; i++){
+                        JSONObject competJSON = jsonArray.getJSONObject(i);
+                        Competition cpt = new Competition(
+                                competJSON.get("country_name").toString(),
+                                competJSON.get("country_logo").toString(),
+                                competJSON.get("league_name").toString(),
+                                competJSON.get("league_id").toString()
+                        );
+                        lstCompetitionDay.add(cpt);
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

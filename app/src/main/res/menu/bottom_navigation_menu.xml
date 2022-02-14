@@ -7,11 +7,5 @@
         android:icon="@drawable/terrain"
         android:title="@string/bottom_navigation_menu_tous_les_matchs"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/onglet_en_direct"
-        android:enabled="true"
-        android:icon="@drawable/score"
-        android:title="@string/bottom_navigation_menu_en_direct"
-        app:showAsAction="ifRoom" />
 
 </menu>
